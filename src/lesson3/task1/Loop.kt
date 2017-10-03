@@ -63,14 +63,14 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Найти количество цифр в заданном числе n.
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
-fun digitNumber(n: Int): Int {
+fun digitNumber(n: Int): Int  {
     var count = 0
     var number = n
     do {
         count++
         number /= 10
-    } while (number > 0)
-return count
+    } while (abs(number) > 0)
+    return count
 }
 
 /**
@@ -136,10 +136,10 @@ fun lcm(m: Int, n: Int): Int {
      */
         fun minDivisor(n: Int): Int {
         var divisor = 2
-        if (divisor == n) {divisor}
+        if (n % divisor == 0) {divisor}
         else {
             do {
-        divisor++
+                divisor++
             }
             while (n % divisor != 0)
         }
@@ -147,23 +147,25 @@ fun lcm(m: Int, n: Int): Int {
     }
 
 
-            /**
+
+
+/**
              * Простая
              *
              * Для заданного числа n > 1 найти максимальный делитель, меньший n
              */
-            fun maxDivisor(n: Int): Int {
-                var divisor = (n-1)
-                if (divisor == n) {divisor}
-                else
-                {
-                    do {
-                        divisor--
-                    }
-                        while (n % divisor !=0)
-                }
-                return divisor
-            }
+            fun maxDivisor(n: Int): Int  {
+    var divisor = (n-1)
+    if (n % divisor == 0) {divisor}
+    else
+    {
+        do {
+            divisor--
+        }
+        while (n % divisor !=0)
+    }
+    return divisor
+}
     /**
      * Простая
      *
@@ -190,27 +192,19 @@ fun lcm(m: Int, n: Int): Int {
              */
             fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
 
-    /**
+
+
+/**
      * Средняя
      *
      * Для заданного x рассчитать с заданной точностью eps
      * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
      * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
      */
-        fun sin(x: Double, eps: Double): Double {
-        var component = x
-        var Sinx = 0.0
-        var argument = 1.0
-        do {
-            Sinx += component
-            component = -1 * pow(component, argument) / factorial(argument.toInt())
-            argument += 2.0
-        }
-            while (abs(component) >= abs(eps))
-        return Sinx
-    }
+        fun sin(x: Double, eps: Double): Double  = TODO()
 
-            /**
+
+/**
              * Средняя
              *
              * Для заданного x рассчитать с заданной точностью eps
@@ -218,20 +212,10 @@ fun lcm(m: Int, n: Int): Int {
              * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
              */
             fun cos(x: Double, eps: Double)
-            : Double {
-                var component = 1.0
-                var Cosx = 0.0
-                var argument = 0.0
-                do {
-                    Cosx += component
-                    argument += 2.0
-                    component = -1 * pow(x, argument) / factorial(argument.toInt()).toDouble()
-                }
-                    while (abs(component) >= abs(eps))
-                return Cosx
-            }
+            : Double  = TODO()
 
-    /**
+
+/**
      * Средняя
      *
      * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
@@ -270,24 +254,10 @@ return ReversedNumber
      * Для заданного числа n определить, содержит ли оно различающиеся цифры.
      * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
      */
-        fun hasDifferentDigits(n: Int): Boolean {
-        var number = n
-        var lastFigure = 0
-        do{
-            lastFigure = number % 10
-            number /= 10
-              do {
-                if (lastFigure == number % 10) return false
-                else {
-                    number /= 10
-                }
-            } while (number > 0)
-        } while (number > 0)
-        return true
-    }
+        fun hasDifferentDigits(n: Int): Boolean = TODO()
 
 
-            /**
+/**
              * Сложная
              *
              * Найти n-ю цифру последовательности из квадратов целых чисел:
@@ -295,34 +265,60 @@ return ReversedNumber
              * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
              */
             fun squareSequenceDigit(n: Int): Int {
-                var Length = 0
-                var number = 0
+                var Length = 0L
+                var number = 0L
+                var NumberSquare = 0L
                 do {
                     number++
-                    Length += digitNumber(number * number)
+                    NumberSquare = number * number
+                    Length += digitNumber(NumberSquare.toInt())
                 }
                 while (Length < n)
-                if (Length == n) {
-                    return number * number % 10
-                }
-                else {
-                    val difference = n - Length
-                    val lengthLastComponent = digitNumber((number) * (number))
-                    val differenceForLast = lengthLastComponent - difference
-                    var answer = number * number
-                    for (i in 1..differenceForLast) {
-                        answer /= 10
+                return when {
+                    (Length == 1L) -> 1
+                    (Length.toInt() == n) -> NumberSquare.toInt()  % 10
+                    else -> {
+                        val difference =  Length - n
+                        val lengthLastComponent = digitNumber(NumberSquare.toInt())
+                        var answer = NumberSquare
+                        for (i in 1..difference) {
+                            answer /= 10
+                        }
+                        return answer.toInt() % 10
                     }
-                    return answer % 10
                 }
             }
 
-    /**
+/**
      * Сложная
      *
      * Найти n-ю цифру последовательности из чисел Фибоначчи (см. функцию fib выше):
      * 1123581321345589144...
      * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
      */
-        fun fibSequenceDigit(n: Int): Int = TODO()
+        fun fibSequenceDigit(n: Int): Int  {
+    var Length = 0L
+    var Number = 0L
+    var NumberFib = 0L
+    do {
+        Number++
+        NumberFib = fib(Number.toInt()).toLong()
+        Length += digitNumber(NumberFib.toInt())
+    }
+    while (Length.toInt() < n)
+    return when {
+        (Length.toInt() == 1) -> 1
+        (Length.toInt() == n) -> NumberFib.toInt() % 10
+        else -> {
+            val difference = Length.toInt() - n
+            val lengthLastComponent = digitNumber(NumberFib.toInt())
+            var answer = NumberFib
+                    for (i in 1..difference) {
+                        answer /= 10
+                    }
+            return answer.toInt() % 10
+        }
+    }
+}
+
 
