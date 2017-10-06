@@ -138,14 +138,12 @@ fun lcm(m: Int, n: Int): Int {
         var divisor = 2
         if (n % divisor == 0) {divisor}
         else {
-            do {
+            while (n % divisor != 0) {
                 divisor++
             }
-            while (n % divisor != 0)
         }
         return divisor
     }
-
 
 
 
@@ -159,10 +157,10 @@ fun lcm(m: Int, n: Int): Int {
     if (n % divisor == 0) {divisor}
     else
     {
-        do {
+        while (n % divisor != 0) {
             divisor--
         }
-        while (n % divisor !=0)
+
     }
     return divisor
 }
@@ -190,7 +188,19 @@ fun lcm(m: Int, n: Int): Int {
              * то есть, существует ли такое целое k, что m <= k*k <= n.
              * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
              */
-            fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+            fun squareBetweenExists(m: Int, n: Int): Boolean {
+                val sqrtn = sqrt(n.toDouble())
+                val sqrtm = sqrt(m.toDouble())
+                if (sqrtn % 1.0 == 0.0) return true
+                else {
+                    for (i in sqrtn.toInt() + 1..sqrtm.toInt()) {
+                        if (sqrt(i.toDouble()) % 1.0 == 0.0) return true
+                    }
+                    return false
+                }
+            }
+
+
 
 
 
@@ -254,7 +264,10 @@ return ReversedNumber
      * Для заданного числа n определить, содержит ли оно различающиеся цифры.
      * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
      */
-        fun hasDifferentDigits(n: Int): Boolean = TODO()
+        fun hasDifferentDigits(n: Int): Boolean  = TODO()
+
+
+
 
 
 /**
