@@ -3,6 +3,7 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import java.lang.Math.sqrt
+import java.lang.Math.abs
 
 /**
  * Пример
@@ -19,12 +20,12 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val a4 = number % 10
-    val a3 = (number / 10) % 10
-    val a2 = (number / 100) % 10
-    val a1 = number / 1000
-    if ((a1 + a2) == (a3 + a4)) {return true}
-    else {return false}
+    fun separateFigures(x : Int): Int {
+        val a1 = x % 10
+        val a2 = x / 10
+        return a1 + a2
+    }
+    return (separateFigures(number / 100) == separateFigures(number % 100))
 }
 
 /**
@@ -34,14 +35,9 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    var absX:Int = 0
-    var absY:Int = 0
-    if (x1 - x2 >= 0) {absX = x1 - x2} else {absX = x2 - x1}
-    if (y1 - y2 >= 0) {absY = y1 - y2} else {absY = y2 - y1}
-   if ((x1 == x2) || (y1 == y2) || (absX == absY)) {return true}
-    else {return false}
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
+
 
 /**
  * Средняя
@@ -51,11 +47,9 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть true, если утверждение верно
  */
 fun circleInside(x1: Double, y1: Double, r1: Double,
-                 x2: Double, y2: Double, r2: Double): Boolean {
-    val CentresDistance = sqrt(sqr(x2 - x1) + sqr(y2 - y1))
-    if (CentresDistance + r1 <= r2) {return true}
-    else {return false}
-}
+                 x2: Double, y2: Double, r2: Double): Boolean =
+     (sqrt(sqr(x2 - x1) + sqr(y2 - y1)) + r1 <= r2)
+
 
 /**
  * Средняя
@@ -72,4 +66,3 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
     (c <= r) && ((a <= s) || (b <= s)) -> true
     else -> false
 }
-

@@ -2,6 +2,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import java.lang.Math.*
 
 /**
  * Пример
@@ -34,10 +36,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String = when {
-    (age % 10 == 1) && (age % 100 != 11) -> age.toString() + " год"
-    (age % 10 in 2..4) && (age !in 12..14) && (age !in 112..114) -> age.toString() + " года"
-    else -> age.toString() + " лет"
-
+    (age % 10 == 1) && (age % 100 != 11) -> "$age год"
+    (age % 10 in 2..4) && (age % 100 !in 12..14) ->  "$age года"
+    else ->  "$age лет"
 }
 
 
@@ -51,22 +52,21 @@ fun ageDescription(age: Int): String = when {
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
                    t3: Double, v3: Double): Double {
-    val FullLength = t1 * v1 + t2 * v2 + t3 * v3
-    val HalfLength = FullLength * 0.5
-    val Length1 = t1 * v1
-    val Length2 = t2 * v2
-    val Length3 = t3 * v3
-    var result: Double = 0.0
-    if (HalfLength <= Length1) {
-          result =  HalfLength / v1
+    val length1 = t1 * v1
+    val length2 = t2 * v2
+    val length3 = t3 * v3
+    val halfLength = (length1 + length2 + length3) * 0.5
+    return when {
+        (halfLength <= length1) -> {
+            return halfLength / v1
+        }
+        (halfLength in length1..length1 + length2) -> {
+            return t1 + (halfLength - length1) / v2
+        }
+        else -> {
+            return t1 + t2 + (halfLength - length1 - length2) / v3
+        }
     }
-    if (HalfLength in Length1..Length1+Length2) {
-       result = t1 + (HalfLength - Length1) / v2
-    }
-    if (HalfLength >= Length1 + Length2) {
-     result = t1 + t2 + (HalfLength - Length1 - Length2) / v3
-    }
-return result
 }
 
 
@@ -84,14 +84,22 @@ return result
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = when {
+                       rookX2: Int, rookY2: Int): Int {
+        val dangerRook1 = when {
+            kingX != rookX1 && kingY != rookY1 -> 0
+                                         else  -> 1
+        }
+        val dangerRook2 = when {
+            kingX != rookX2 && kingY != rookY2 -> 0
+                                          else -> 1
+        }
+    return when {
     kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
-    (kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2) -> 1
-    (kingX == rookX2 || kingY == rookY2) && (kingX != rookX1 && kingY != rookY1) -> 2
+    (dangerRook1 == 1) && (dangerRook2 == 0) -> 1
+    (dangerRook2 == 1) && (dangerRook1 == 0) -> 2
     else -> 3
-
 }
-
+}
 /**
  * Простая
  *
@@ -104,61 +112,60 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int {
-    var bishopDangerX: Int = 0
-    var bishopDangerY: Int = 0
-    if (kingX - bishopX >= 0) {
-        bishopDangerX = kingX - bishopX
-    } else {
-        bishopDangerX = bishopX - kingX
-    }
-    if (kingY - bishopY >= 0) {
-        bishopDangerY = kingY - bishopY
-    } else {
-        bishopDangerY = bishopY - kingY
+                          bishopX: Int, bishopY: Int): Int  {
+    val bishopDangerX = abs(kingX - bishopX)
+    val bishopDangerY: Int = abs(kingY - bishopY)
+    val rookDanger  = when {
+        (kingX != rookX) && (kingY != rookY) -> 0
+        else -> 1
     }
     return when {
-        ((kingX == rookX) || (kingY == rookY)) && (bishopDangerX == bishopDangerY) -> 3
-        (kingX != rookX) && (kingY != rookY) && (bishopDangerX == bishopDangerY) -> 2
-        (kingX == rookX || kingY == rookY) && (bishopDangerX != bishopDangerY)  -> 1
+        (rookDanger == 1) && (bishopDangerX == bishopDangerY) -> 3
+        (rookDanger == 0) && (bishopDangerX == bishopDangerY) -> 2
+        (rookDanger == 1) && (bishopDangerX != bishopDangerY)  -> 1
         else -> 0
     }
 }
-    /**
-     * Простая
-     *
-     * Треугольник задан длинами своих сторон a, b, c.
-     * Проверить, является ли данный треугольник остроугольным (вернуть 0),
-     * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
-     * Если такой треугольник не существует, вернуть -1.
-     */
-    fun triangleKind(a: Double, b: Double, c: Double): Int {
-        val cosA = (b * b + c * c - a *a)/ 2 / b / c
-        val cosB = (a * a + c *c - b *b) / 2 / a / c
-        val cosC = (a * a + b * b - c *c) / 2 / a / b
-        return when {
-            ((a + b < c) || (a + c < b) || (c + b < a)) -> -1
-            ((cosA == 0.0) && (cosB > 0) && (cosC > 0)) || ((cosA > 0) && (cosB == 0.0) && (cosC > 0)) || ((cosA > 0) && (cosB > 0) && (cosC == 0.0)) -> 1
-            ((c * c > a * a + b * b) && (cosA > 0) && (cosB > 0))   || ((a * a > b * b + c * c) && (cosC > 0) && (cosB > 0)) || ((b * b > a * a + c * c) && (cosA > 0) && (cosC > 0)) -> 2
-            else -> 0
-        }
-    }
 
-    /**
-     * Средняя
-     *
-     * Даны четыре точки на одной прямой: A, B, C и D.
-     * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
-     * Найти длину пересечения отрезков AB и CD.
-     * Если пересечения нет, вернуть -1.
-     */
-    fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-        return when {
-            (a >= c) && (b <= d) -> (b - a)
-            (c <= b) && (c >= a) && (d >= b) -> (b - c)
-            (d <= b) && (c >= a) -> (d -c)
-            (d <= b) && (d >= a) && (c <= a) -> (d - a)
-      else -> -1
-        }
+
+
+/**
+         * Простая
+         *
+         * Треугольник задан длинами своих сторон a, b, c.
+         * Проверить, является ли данный треугольник остроугольным (вернуть 0),
+         * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
+         * Если такой треугольник не существует, вернуть -1.
+         */
+        fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val maxSide = max(max(a, b), max(b, c))
+    val minSide = min(min(a, b), min(b,c))
+    val midSide = (a + b + c - maxSide - minSide)
+    val cosMax = ((minSide * minSide) + (midSide * midSide) - (maxSide * maxSide)) / 2 / minSide / midSide
+    return when {
+        ((a + b < c) || (a + c < b) || (c + b < a)) -> -1
+        (sqr(maxSide) == sqr(midSide) + sqr(minSide)) -> 1
+        (cosMax < 0.0) -> 2
+        else -> 0
     }
+}
+
+/**
+         * Средняя
+         *
+         * Даны четыре точки на одной прямой: A, B, C и D.
+         * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
+         * Найти длину пересечения отрезков AB и CD.
+         * Если пересечения нет, вернуть -1.
+         */
+        fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return when {
+        (a >= c) && (b <= d) -> (b - a)
+        (c <= b) && (c >= a) && (d >= b) -> (b - c)
+        (d <= b) && (c >= a) -> (d - c)
+        (d <= b) && (d >= a) && (c <= a) -> (d - a)
+        else -> -1
+    }
+}
+
 
