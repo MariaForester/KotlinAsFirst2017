@@ -5,6 +5,7 @@ import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import java.lang.Math.*
 
+
 /**
  * Пример
  *
@@ -85,20 +86,14 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
-        val dangerRook1 = when {
-            kingX != rookX1 && kingY != rookY1 -> 0
-                                         else  -> 1
-        }
-        val dangerRook2 = when {
-            kingX != rookX2 && kingY != rookY2 -> 0
-                                          else -> 1
-        }
+    val dangerRook1 = kingX != rookX1 && kingY != rookY1
+    val dangerRook2 = kingX != rookX2 && kingY != rookY2
     return when {
-    kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
-    (dangerRook1 == 1) && (dangerRook2 == 0) -> 1
-    (dangerRook2 == 1) && (dangerRook1 == 0) -> 2
-    else -> 3
-}
+        kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
+        !dangerRook1 && dangerRook2 -> 1
+        !dangerRook2 && dangerRook1-> 2
+        else -> 3
+    }
 }
 /**
  * Простая
@@ -114,18 +109,16 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int  {
     val bishopDangerX = abs(kingX - bishopX)
-    val bishopDangerY: Int = abs(kingY - bishopY)
-    val rookDanger  = when {
-        (kingX != rookX) && (kingY != rookY) -> 0
-        else -> 1
+    val bishopDangerY = abs(kingY - bishopY)
+    val rookDanger  = (kingX != rookX) && (kingY != rookY)
+    return if (!rookDanger) {
+         if (bishopDangerX == bishopDangerY) 3
+         else 1
+    } else {
+        if (bishopDangerX == bishopDangerY) 2
+        else 0
     }
-    return when {
-        (rookDanger == 1) && (bishopDangerX == bishopDangerY) -> 3
-        (rookDanger == 0) && (bishopDangerX == bishopDangerY) -> 2
-        (rookDanger == 1) && (bishopDangerX != bishopDangerY)  -> 1
-        else -> 0
     }
-}
 
 
 
@@ -138,17 +131,17 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
          * Если такой треугольник не существует, вернуть -1.
          */
         fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val maxSide = max(max(a, b), max(b, c))
-    val minSide = min(min(a, b), min(b,c))
-    val midSide = (a + b + c - maxSide - minSide)
-    val cosMax = ((minSide * minSide) + (midSide * midSide) - (maxSide * maxSide)) / 2 / minSide / midSide
-    return when {
-        ((a + b < c) || (a + c < b) || (c + b < a)) -> -1
-        (sqr(maxSide) == sqr(midSide) + sqr(minSide)) -> 1
-        (cosMax < 0.0) -> 2
-        else -> 0
-    }
-}
+         val maxSide = maxOf(a, b, c)
+         val minSide = minOf(a, b, c)
+         val midSide = (a + b + c - maxSide - minSide)
+         val cosMax = (sqr(minSide) + sqr(midSide) - sqr(maxSide)) / 2 / minSide / midSide
+         return when {
+             ((a + b < c) || (a + c < b) || (c + b < a)) -> -1
+             (sqr(maxSide) == sqr(midSide) + sqr(minSide)) -> 1
+             (cosMax < 0.0) -> 2
+             else -> 0
+         }
+        }
 
 /**
          * Средняя
@@ -158,14 +151,12 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
          * Найти длину пересечения отрезков AB и CD.
          * Если пересечения нет, вернуть -1.
          */
-        fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return when {
-        (a >= c) && (b <= d) -> (b - a)
-        (c <= b) && (c >= a) && (d >= b) -> (b - c)
-        (d <= b) && (c >= a) -> (d - c)
-        (d <= b) && (d >= a) && (c <= a) -> (d - a)
+        fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+            (a >= c) && (b <= d) -> (b - a)
+            (c <= b) && (c >= a) && (d >= b) -> (b - c)
+            (d <= b) && (c >= a) -> (d - c)
+            (d <= b) && (d >= a) && (c <= a) -> (d - a)
         else -> -1
-    }
-}
+        }
 
 
