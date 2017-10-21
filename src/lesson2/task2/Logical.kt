@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task2
 
 import lesson1.task1.sqr
@@ -20,13 +21,10 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    fun separateFigures(x : Int): Int {
-        val lastFigure = x % 10
-        val firstFigure = x / 10
-        return lastFigure + firstFigure
-    }
-    return (separateFigures(number / 100) == separateFigures(number % 100))
+    fun separateDigits(x: Int): Int = (x % 10) + (x / 10)
+    return (separateDigits(number / 100) == separateDigits(number % 100))
 }
+
 
 /**
  * Простая
@@ -36,7 +34,7 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-    (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
+        (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
 
 
 /**

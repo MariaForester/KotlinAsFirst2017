@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -38,8 +39,8 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String = when {
     (age % 10 == 1) && (age % 100 != 11) -> "$age год"
-    (age % 10 in 2..4) && (age % 100 !in 12..14) ->  "$age года"
-    else ->  "$age лет"
+    (age % 10 in 2..4) && (age % 100 !in 12..14) -> "$age года"
+    else -> "$age лет"
 }
 
 
@@ -59,19 +60,16 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val halfLength = (length1 + length2 + length3) * 0.5
     return when {
         (halfLength <= length1) -> {
-            return halfLength / v1
+            halfLength / v1
         }
         (halfLength in length1..length1 + length2) -> {
-            return t1 + (halfLength - length1) / v2
+            t1 + (halfLength - length1) / v2
         }
         else -> {
-            return t1 + t2 + (halfLength - length1 - length2) / v3
+            t1 + t2 + (halfLength - length1 - length2) / v3
         }
     }
 }
-
-
-
 
 
 /**
@@ -89,12 +87,14 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
     val dangerRook1 = kingX != rookX1 && kingY != rookY1
     val dangerRook2 = kingX != rookX2 && kingY != rookY2
     return when {
-        kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
+        dangerRook1 && dangerRook2 -> 0
         !dangerRook1 && dangerRook2 -> 1
-        !dangerRook2 && dangerRook1-> 2
+        !dangerRook2 && dangerRook1 -> 2
         else -> 3
     }
 }
+
+
 /**
  * Простая
  *
@@ -107,56 +107,60 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int  {
+                          bishopX: Int, bishopY: Int): Int {
     val bishopDangerX = abs(kingX - bishopX)
     val bishopDangerY = abs(kingY - bishopY)
-    val rookDanger  = (kingX != rookX) && (kingY != rookY)
-    return if (!rookDanger) {
-         if (bishopDangerX == bishopDangerY) 3
-         else 1
+    return if ((kingX == rookX) || (kingY == rookY)) {
+        if (bishopDangerX == bishopDangerY) {
+            3
+        } else {
+            1
+        }
     } else {
-        if (bishopDangerX == bishopDangerY) 2
-        else 0
+        if (bishopDangerX == bishopDangerY) {
+            2
+        } else {
+            0
+        }
     }
-    }
-
+}
 
 
 /**
-         * Простая
-         *
-         * Треугольник задан длинами своих сторон a, b, c.
-         * Проверить, является ли данный треугольник остроугольным (вернуть 0),
-         * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
-         * Если такой треугольник не существует, вернуть -1.
-         */
-        fun triangleKind(a: Double, b: Double, c: Double): Int {
-         val maxSide = maxOf(a, b, c)
-         val minSide = minOf(a, b, c)
-         val midSide = (a + b + c - maxSide - minSide)
-         val cosMax = (sqr(minSide) + sqr(midSide) - sqr(maxSide)) / 2 / minSide / midSide
-         return when {
-             ((a + b < c) || (a + c < b) || (c + b < a)) -> -1
-             (sqr(maxSide) == sqr(midSide) + sqr(minSide)) -> 1
-             (cosMax < 0.0) -> 2
-             else -> 0
-         }
-        }
+ * Простая
+ *
+ * Треугольник задан длинами своих сторон a, b, c.
+ * Проверить, является ли данный треугольник остроугольным (вернуть 0),
+ * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
+ * Если такой треугольник не существует, вернуть -1.
+ */
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val maxSide = maxOf(a, b, c)
+    val minSide = minOf(a, b, c)
+    val midSide = a + b + c - maxSide - minSide
+    val cosMax = (sqr(minSide) + sqr(midSide) - sqr(maxSide)) / 2 / minSide / midSide
+    return when {
+        (a + b < c) || (a + c < b) || (c + b < a) -> -1
+        sqr(maxSide) == sqr(midSide) + sqr(minSide) -> 1
+        cosMax < 0.0 -> 2
+        else -> 0
+    }
+}
 
 /**
-         * Средняя
-         *
-         * Даны четыре точки на одной прямой: A, B, C и D.
-         * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
-         * Найти длину пересечения отрезков AB и CD.
-         * Если пересечения нет, вернуть -1.
-         */
-        fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-            (a >= c) && (b <= d) -> (b - a)
-            (c <= b) && (c >= a) && (d >= b) -> (b - c)
-            (d <= b) && (c >= a) -> (d - c)
-            (d <= b) && (d >= a) && (c <= a) -> (d - a)
-        else -> -1
-        }
+ * Средняя
+ *
+ * Даны четыре точки на одной прямой: A, B, C и D.
+ * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
+ * Найти длину пересечения отрезков AB и CD.
+ * Если пересечения нет, вернуть -1.
+ */
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    (a >= c) && (b <= d) -> (b - a)
+    (c <= b) && (c >= a) && (d >= b) -> (b - c)
+    (d <= b) && (c >= a) -> (d - c)
+    (d <= b) && (d >= a) && (c <= a) -> (d - a)
+    else -> -1
+}
 
 

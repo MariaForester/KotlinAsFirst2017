@@ -1,9 +1,13 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.isPrime
+import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
+
 /**
  * Пример
  *
@@ -107,8 +111,15 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
-
+fun abs(v: List<Double>): Double {
+    if (v.isNotEmpty()) {
+        var sum = 0.0
+        for (i in 0 until v.size) {
+            sum += pow(v[i], 2.0)
+        }
+        return sqrt(sum)
+    } else return 0.0
+}
 
 
 /**
@@ -119,8 +130,7 @@ fun abs(v: List<Double>): Double = TODO()
 fun mean(list: List<Double>): Double {
     if (list.isEmpty()) {
         return 0.0
-    }
-    else {
+    } else {
         var sum = 0.0
         var count = 0
         for (i in 0 until list.size) {
@@ -158,14 +168,23 @@ fun center(list: MutableList<Double>): MutableList<Double> {
 }
 
 
-    /**
+/**
  * Средняя
  *
  * Найти скалярное произведение двух векторов равной размерности,
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double = TODO()
+fun times(a: List<Double>, b: List<Double>): Double {
+    if (a.isNotEmpty()) {
+        var product = 0.0
+        for (i in 0 until a.size) {
+            product += a[i] * b[i]
+        }
+        return product
+    } else return 0.0
+}
+
 
 /**
  * Средняя
@@ -175,7 +194,15 @@ fun times(a: List<Double>, b: List<Double>): Double = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0.0 при любом x.
  */
-fun polynom(p: List<Double>, x: Double): Double = TODO()
+fun polynom(p: List<Double>, x: Double): Double {
+    var P = 0.0
+    var extent = 0.0
+    for (i in 0 until p.size) {
+        P += p[i] * pow(x, extent)
+        extent += 1.0
+    }
+    return P
+}
 
 
 /**
@@ -198,6 +225,7 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> = TODO()
+
 
 /**
  * Сложная
