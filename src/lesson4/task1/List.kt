@@ -112,13 +112,11 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double {
-    if (v.isNotEmpty()) {
-        var sum = 0.0
-        for (i in 0 until v.size) {
-            sum += pow(v[i], 2.0)
-        }
-        return sqrt(sum)
-    } else return 0.0
+    var sum = 0.0
+    for (i in v) {
+        sum += pow(i, 2.0)
+    }
+    return sqrt(sum)
 }
 
 
@@ -128,18 +126,11 @@ fun abs(v: List<Double>): Double {
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
 fun mean(list: List<Double>): Double {
-    if (list.isEmpty()) {
-        return 0.0
+    return if (list.isEmpty()) {
+        0.0
     } else {
-        var sum = 0.0
-        var count = 0
-        for (i in 0 until list.size) {
-            sum += list[i]
-            count++
-        }
-        return sum / count
+        list.sum() / list.size
     }
-
 }
 
 
@@ -152,17 +143,9 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isNotEmpty()) {
-        var sum = 0.0
-        var count = 0
-        for (i in 0 until list.size) {
-            sum += list[i]
-            count++
-        }
-        for (i in 0 until list.size) {
-            list[i] -= (sum / count)
-        }
-        return list
+    var arithmeticMean = mean(list)
+    for (i in 0..list.size - 1) {
+        list[i] -= arithmeticMean
     }
     return list
 }
@@ -176,13 +159,11 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double {
-    if (a.isNotEmpty()) {
-        var product = 0.0
-        for (i in 0 until a.size) {
-            product += a[i] * b[i]
-        }
-        return product
-    } else return 0.0
+    var product = 0.0
+    for (i in 0 until a.size) {
+        product += a[i] * b[i]
+    }
+    return product
 }
 
 
@@ -196,10 +177,10 @@ fun times(a: List<Double>, b: List<Double>): Double {
  */
 fun polynom(p: List<Double>, x: Double): Double {
     var P = 0.0
-    var extent = 0.0
-    for (i in 0 until p.size) {
-        P += p[i] * pow(x, extent)
-        extent += 1.0
+    var extent = 1.0
+    for (i in p) {
+        P += i * extent
+        extent *= x
     }
     return P
 }

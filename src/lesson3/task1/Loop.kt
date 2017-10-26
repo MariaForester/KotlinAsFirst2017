@@ -5,18 +5,19 @@ package lesson3.task1
 import lesson1.task1.sqr
 import java.lang.Math.*
 
-fun sequenceDigit(a: Long, b: Long, c: Int): Int = when {
-    a == 1L -> 1
-    else -> {
-        val difference = a - c
-        var answer = b
-        for (i in 1..difference) {
-            answer /= 10
+fun sequenceDigit(size: Int, squareDigit: Int, numberDigit: Int): Int {
+    return if (size == 1) {
+        1
+    } else {
+        var length = size
+        var square = squareDigit
+        while (length > numberDigit) {
+            square /= 10
+            length--
         }
-        answer.toInt() % 10
+        square % 10
     }
 }
-
 
 /**
  * Пример
@@ -72,9 +73,15 @@ fun isPerfect(n: Int): Boolean {
  */
 fun digitCountInNumber(n: Int, m: Int): Int =
         when {
-            n == m -> 1
-            n < 10 -> 0
-            else -> digitCountInNumber(n / 10, m) + digitCountInNumber(n % 10, m)
+            n == m -> {
+                1
+            }
+            n < 10 -> {
+                0
+            }
+            else -> {
+                digitCountInNumber(n / 10, m) + digitCountInNumber(n % 10, m)
+            }
         }
 
 /**
@@ -112,7 +119,7 @@ fun fib(n: Int): Int {
             fib1 = fib2
             fib2 = fibN
         }
-        return fibN
+        fibN
     }
 }
 
@@ -125,9 +132,8 @@ fun fib(n: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var maximum = max(m, n)
     var minimum = min(m, n)
-    var a = 0
     while (maximum != minimum) {
-        a = maximum - minimum
+        var a = maximum - minimum
         maximum = max(a, minimum)
         minimum = min(a, minimum)
     }
@@ -142,7 +148,7 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var divisor = 2
-    while (n % divisor != 0 && divisor < n) {
+    while (n % divisor != 0) {
         divisor++
     }
     return divisor
@@ -155,7 +161,7 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var divisor = (n - 1)
+    var divisor = n - 1
     while (n % divisor != 0) {
         divisor--
     }
@@ -186,10 +192,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val M = ceil(m.toDouble())
-    val N = floor(n.toDouble())
-    for (i in 1..n) {
-        if (pow(i.toDouble(), 2.0) in M..N) {
+    for (i in 1..sqrt(n.toDouble()).toInt()) {
+        if (i * i in m..n) {
             return true
         }
     }
@@ -254,17 +258,17 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var number = n
     var lastFigure = 0
-    if (abs(n) < 10) return false
-    else {
-        while (number > 10) {
-            lastFigure = number % 10
-            number /= 10
-            if (number % 10 != lastFigure) {
-                return true
-            }
-        }
+    if (abs(n) < 10) {
         return false
     }
+    while (number > 10) {
+        lastFigure = number % 10
+        number /= 10
+        if (number % 10 != lastFigure) {
+            return true
+        }
+    }
+    return false
 }
 
 
@@ -276,13 +280,15 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var length = 0L
-    var number = 0L
-    var numberSquare = 0L
+    var length = 0
+    var number = 0
+    var sequenceItself = 0
+    var numberSquare = 0
     do {
         number++
         numberSquare = number * number
         length += digitNumber(numberSquare.toInt())
+        sequenceItself = sequenceItself * pow(10.0, digitNumber(numberSquare).toDouble()).toInt() + numberSquare
     } while (length < n)
     return sequenceDigit(length, numberSquare, n)
 }
@@ -296,14 +302,14 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var length = 0L
-    var number = 0L
-    var numberFib = 0L
+    var length = 0
+    var number = 0
+    var numberFib = 0
     do {
         number++
-        numberFib = fib(number.toInt()).toLong()
-        length += digitNumber(numberFib.toInt())
-    } while (length.toInt() < n)
+        numberFib = fib(number)
+        length += digitNumber(numberFib)
+    } while (length < n)
     return sequenceDigit(length, numberFib, n)
 }
 

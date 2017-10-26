@@ -21,8 +21,8 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    fun separateDigits(x: Int): Int = (x % 10) + (x / 10)
-    return (separateDigits(number / 100) == separateDigits(number % 100))
+    fun detachedDigits(x: Int): Int = (x % 10) + (x / 10)
+    return (detachedDigits(number / 100) == detachedDigits(number % 100))
 }
 
 
@@ -58,8 +58,16 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
-    (a <= r) && ((b <= s) || (c <= s)) -> true
-    (b <= r) && ((a <= s) || (c <= s)) -> true
-    (c <= r) && ((a <= s) || (b <= s)) -> true
-    else -> false
+    (a <= r) && ((b <= s) || (c <= s)) -> {
+        true
+    }
+    (b <= r) && ((a <= s) || (c <= s)) -> {
+        true
+    }
+    (c <= r) && ((a <= s) || (b <= s)) -> {
+        true
+    }
+    else -> {
+        false
+    }
 }

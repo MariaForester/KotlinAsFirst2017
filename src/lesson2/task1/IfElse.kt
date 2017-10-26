@@ -84,13 +84,21 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
-    val dangerRook1 = kingX != rookX1 && kingY != rookY1
-    val dangerRook2 = kingX != rookX2 && kingY != rookY2
+    val noDangerRook1 = kingX != rookX1 && kingY != rookY1
+    val noDangerRook2 = kingX != rookX2 && kingY != rookY2
     return when {
-        dangerRook1 && dangerRook2 -> 0
-        !dangerRook1 && dangerRook2 -> 1
-        !dangerRook2 && dangerRook1 -> 2
-        else -> 3
+        noDangerRook1 && noDangerRook2 -> {
+            0
+        }
+        !noDangerRook1 && noDangerRook2 -> {
+            1
+        }
+        !noDangerRook2 && noDangerRook1 -> {
+            2
+        }
+        else -> {
+            3
+        }
     }
 }
 
@@ -110,19 +118,20 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           bishopX: Int, bishopY: Int): Int {
     val bishopDangerX = abs(kingX - bishopX)
     val bishopDangerY = abs(kingY - bishopY)
-    return if ((kingX == rookX) || (kingY == rookY)) {
-        if (bishopDangerX == bishopDangerY) {
+    return if (bishopDangerX == bishopDangerY) {
+        if ((kingX == rookX) || (kingY == rookY)) {
             3
         } else {
-            1
+            2
         }
     } else {
-        if (bishopDangerX == bishopDangerY) {
-            2
+        if ((kingX == rookX) || (kingY == rookY)) {
+            1
         } else {
             0
         }
     }
+
 }
 
 
@@ -140,10 +149,18 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val midSide = a + b + c - maxSide - minSide
     val cosMax = (sqr(minSide) + sqr(midSide) - sqr(maxSide)) / 2 / minSide / midSide
     return when {
-        (a + b < c) || (a + c < b) || (c + b < a) -> -1
-        sqr(maxSide) == sqr(midSide) + sqr(minSide) -> 1
-        cosMax < 0.0 -> 2
-        else -> 0
+        (a + b < c) || (a + c < b) || (c + b < a) -> {
+            -1
+        }
+        sqr(maxSide) == sqr(midSide) + sqr(minSide) -> {
+            1
+        }
+        cosMax < 0.0 -> {
+            2
+        }
+        else -> {
+            0
+        }
     }
 }
 
@@ -156,11 +173,21 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-    (a >= c) && (b <= d) -> (b - a)
-    (c <= b) && (c >= a) && (d >= b) -> (b - c)
-    (d <= b) && (c >= a) -> (d - c)
-    (d <= b) && (d >= a) && (c <= a) -> (d - a)
-    else -> -1
+    (a >= c) && (b <= d) -> {
+        b - a
+    }
+    (c <= b) && (c >= a) && (d >= b) -> {
+        b - c
+    }
+    (d <= b) && (c >= a) -> {
+        d - c
+    }
+    (d <= b) && (d >= a) && (c <= a) -> {
+        d - a
+    }
+    else -> {
+        -1
+    }
 }
 
 
