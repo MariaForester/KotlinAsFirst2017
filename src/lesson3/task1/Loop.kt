@@ -5,17 +5,17 @@ package lesson3.task1
 import lesson1.task1.sqr
 import java.lang.Math.*
 
-fun sequenceDigit(size: Int, squareDigit: Int, numberDigit: Int): Int {
-    return if (size == 1) {
+fun sequenceDigit(number: Int, position: Int): Int {
+    return if (number == 1) {
         1
     } else {
-        var length = size
-        var square = squareDigit
-        while (length > numberDigit) {
-            square /= 10
-            length--
+        var sequenceToChange = number
+        if (position != 0) {
+            for (i in 1..position) {
+                sequenceToChange /= 10
+            }
         }
-        square % 10
+        sequenceToChange % 10
     }
 }
 
@@ -133,7 +133,7 @@ fun lcm(m: Int, n: Int): Int {
     var maximum = max(m, n)
     var minimum = min(m, n)
     while (maximum != minimum) {
-        var a = maximum - minimum
+        val a = maximum - minimum
         maximum = max(a, minimum)
         minimum = min(a, minimum)
     }
@@ -192,7 +192,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (i in 1..sqrt(n.toDouble()).toInt()) {
+    for (i in 0..sqrt(n.toDouble()).toInt()) {
         if (i * i in m..n) {
             return true
         }
@@ -282,15 +282,13 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun squareSequenceDigit(n: Int): Int {
     var length = 0
     var number = 0
-    var sequenceItself = 0
     var numberSquare = 0
     do {
         number++
         numberSquare = number * number
-        length += digitNumber(numberSquare.toInt())
-        sequenceItself = sequenceItself * pow(10.0, digitNumber(numberSquare).toDouble()).toInt() + numberSquare
+        length += digitNumber(numberSquare)
     } while (length < n)
-    return sequenceDigit(length, numberSquare, n)
+    return sequenceDigit(numberSquare, length - n)
 }
 
 
@@ -310,7 +308,7 @@ fun fibSequenceDigit(n: Int): Int {
         numberFib = fib(number)
         length += digitNumber(numberFib)
     } while (length < n)
-    return sequenceDigit(length, numberFib, n)
+    return sequenceDigit(numberFib, length - n)
 }
 
 

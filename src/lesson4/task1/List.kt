@@ -113,8 +113,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var sum = 0.0
-    for (i in v) {
-        sum += pow(i, 2.0)
+    for (element in v) {
+        sum += pow(element, 2.0)
     }
     return sqrt(sum)
 }
@@ -176,13 +176,13 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Значение пустого многочлена равно 0.0 при любом x.
  */
 fun polynom(p: List<Double>, x: Double): Double {
-    var P = 0.0
+    var value = 0.0
     var extent = 1.0
-    for (i in p) {
-        P += i * extent
+    for (element in p) {
+        value += element * extent
         extent *= x
     }
-    return P
+    return value
 }
 
 
@@ -197,6 +197,7 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
+
 
 /**
  * Средняя
@@ -216,6 +217,7 @@ fun factorize(n: Int): List<Int> = TODO()
  */
 fun factorizeToString(n: Int): String = TODO()
 
+
 /**
  * Средняя
  *
@@ -234,6 +236,7 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String = TODO()
+
 
 /**
  * Средняя
