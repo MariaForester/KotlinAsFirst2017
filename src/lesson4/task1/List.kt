@@ -8,6 +8,7 @@ import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
 
+
 /**
  * Пример
  *
@@ -196,7 +197,16 @@ fun polynom(p: List<Double>, x: Double): Double {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
+fun accumulate(list: MutableList<Double>): MutableList<Double> {
+    if (list.isNotEmpty()) {
+        var Sum = list.first()
+        for (i in 1 until list.size) {
+            Sum += list[i]
+            list[i] = Sum
+        }
+    }
+    return list
+}
 
 
 /**
@@ -206,7 +216,20 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    var divisor = 2
+    var N = n
+    while (N > 0 && divisor <= N) {
+        if (N % divisor == 0) {
+            result.add(divisor)
+            N /= divisor
+        } else {
+            divisor++
+        }
+    }
+    return result.sorted()
+}
 
 
 /**
@@ -215,8 +238,7 @@ fun factorize(n: Int): List<Int> = TODO()
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = TODO()
-
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -225,7 +247,16 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    var N = n
+    do {
+        result.add(N % base)
+        N /= base
+    } while (N > 0)
+    return result.reversed()
+}
+
 
 /**
  * Сложная
@@ -235,7 +266,19 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val alphabet = "abcdefghijklmnopqrstuvwxyz"
+    var list = convert(n, base)
+    var list2 = ""
+    for (i in 0 until list.size) {
+        if (list[i] in 0..9) {
+            list2 += list[i]
+        } else {
+            list2 += alphabet[list[i] - 10]
+        }
+    }
+    return list2
+}
 
 
 /**
@@ -245,7 +288,16 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var n = 0
+    var factor = digits.size - 1
+    for (i in 0 until digits.size) {
+        n += pow(base.toDouble(), factor.toDouble()).toInt() * digits[i]
+        factor--
+    }
+    return n
+}
+
 
 /**
  * Сложная
