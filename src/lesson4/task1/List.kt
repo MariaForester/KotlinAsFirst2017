@@ -2,6 +2,7 @@
 
 package lesson4.task1
 
+import com.sun.org.apache.bcel.internal.generic.IXOR
 import lesson1.task1.discriminant
 import lesson3.task1.isPrime
 import java.lang.Double.NaN
@@ -318,7 +319,19 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romanDigits = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val decimalRank = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    var numberRoman = ""
+    var number = n
+    for (i in 0 until decimalRank.size) {
+        while (number >= decimalRank[i]) {
+            numberRoman += romanDigits[i]
+            number -= decimalRank[i]
+        }
+    }
+    return numberRoman
+}
 
 /**
  * Очень сложная
@@ -327,4 +340,60 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var decimalRank = listOf(900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 19,
+            18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+    var decimalWritten = listOf("девятьсот", "восемьсот", "семьсот", "шестьсот", "пятьсот", "четыреста",
+            "триста", "двести", "сто", "девяносто", "восемьдесят", "семьдесят", "шестьдесят", "пятьдеесят", "сорок",
+            "тридцать", "двадцать", "девятнадцать", "восемнадцать", "семнадцать", "шестнадцать", "пятнадцать",
+            "четырнадцать", "тринадцать", "двенадцать", "одиннадцать", "десять", "деевять", "восемь", "семь", "шесть",
+            "пять", "четыре", "три", "два", "один")
+    var numberWritten = ""
+    var halfNumberLeft = n / 1000
+    var halfNumberRight = n % 1000
+    if (halfNumberLeft != 0) {
+        if (halfNumberLeft in 100..999) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft - (halfNumberLeft % 100))] + " "
+            halfNumberLeft %= 100
+        }
+        if (halfNumberLeft in 20..99) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft / 10 * 10)] + " "
+            halfNumberLeft %= 10
+        }
+        if (halfNumberLeft in 5..19) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft)] + " "
+        }
+        if (halfNumberLeft == 4) {
+            numberWritten += "четыре тысячи"
+        }
+        if (halfNumberLeft == 3) {
+            numberWritten += "три тысячи"
+        }
+        if (halfNumberLeft == 2) {
+            numberWritten += "две тысячи"
+        }
+        if (halfNumberLeft == 1) {
+            numberWritten += "одна тысяча"
+        }
+        if (halfNumberLeft !in 1..4) {
+            numberWritten += "тысяч"
+        }
+    }
+    if (n / 1000 != 0 && n % 1000 != 0) {
+        numberWritten += " "
+    }
+        if (halfNumberRight in 100..999) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight - (halfNumberRight % 100))] + " "
+            halfNumberRight %= 100
+        }
+        if (halfNumberRight in 20..99) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight / 10 * 10)] + " "
+            halfNumberRight %= 10
+        }
+        if (halfNumberRight != 0) {
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight)]
+        }
+    return numberWritten
+}
+
+
