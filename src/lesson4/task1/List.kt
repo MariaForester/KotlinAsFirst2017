@@ -383,12 +383,18 @@ fun russian(n: Int): String {
         numberWritten += " "
     }
         if (halfNumberRight in 100..999) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight - (halfNumberRight % 100))] + " "
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight - (halfNumberRight % 100))]
             halfNumberRight %= 100
+            if (halfNumberRight != 0) {
+                numberWritten += " "
+            }
         }
         if (halfNumberRight in 20..99) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight / 10 * 10)] + " "
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight / 10 * 10)]
             halfNumberRight %= 10
+            if (halfNumberRight != 0) {
+                numberWritten += " "
+            }
         }
         if (halfNumberRight != 0) {
             numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight)]
