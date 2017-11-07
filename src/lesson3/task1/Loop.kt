@@ -209,18 +209,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var component = x
+    var component = abs(x)
     var argument = 1
     var factor = -1
-    var variable = x % (2 * PI)
-    var Sinx = variable
+    val variable = x % (2 * PI)
+    var sinX = variable
     do {
         argument += 2
         component *= pow(variable, 2.0) / (argument * (argument - 1))
-        Sinx += component * factor
+        sinX += component * factor
         factor *= -1
     } while (abs(component) >= eps)
-    return Sinx
+    return sinX
 }
 
 
@@ -237,14 +237,14 @@ fun cos(x: Double, eps: Double): Double {
     var component = 1.0
     var argument = 0
     var factor = -1
-    var CosX = 1.0
+    var cosX = 1.0
     do {
         argument += 2
         component *= pow(variable, 2.0) / (argument * (argument - 1))
-        CosX += component * factor
+        cosX += component * factor
         factor *= -1
     } while (abs(component) >= eps)
-    return CosX
+    return cosX
 }
 
 /**
