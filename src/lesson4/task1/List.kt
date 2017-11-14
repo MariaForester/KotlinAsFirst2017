@@ -2,12 +2,32 @@
 
 package lesson4.task1
 
-import com.sun.org.apache.bcel.internal.generic.IXOR
+
 import lesson1.task1.discriminant
 import lesson3.task1.isPrime
 import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
+
+fun halfNumberforRus(halfNumber: Int, decimalWritten: List<String>, numberWritten: String, decimalRank: List<Int>): String {
+    var half = halfNumber
+    var string = numberWritten
+    if (half in 100..999) {
+        string += decimalWritten[decimalRank.indexOf(half - (half % 100))]
+        half %= 100
+        if (half != 0) {
+            string += " "
+        }
+    }
+    if (half in 20..99) {
+        string += decimalWritten[decimalRank.indexOf(half / 10 * 10)]
+        half %= 10
+        if (half != 0) {
+            string += " "
+        }
+    }
+    return string
+}
 
 
 /**
@@ -200,10 +220,10 @@ fun polynom(p: List<Double>, x: Double): Double {
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
     if (list.isNotEmpty()) {
-        var Sum = list.first()
+        var sum = list.first()
         for (i in 1 until list.size) {
-            Sum += list[i]
-            list[i] = Sum
+            sum += list[i]
+            list[i] = sum
         }
     }
     return list
@@ -268,17 +288,13 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    val alphabet = "abcdefghijklmnopqrstuvwxyz"
-    var list = convert(n, base)
-    var list2 = ""
-    for (i in 0 until list.size) {
-        if (list[i] in 0..9) {
-            list2 += list[i]
-        } else {
-            list2 += alphabet[list[i] - 10]
-        }
+    val alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
+    val numberWithoutLetters = convert(n, base)
+    var numberWithLetters = ""
+    for (i in 0 until numberWithoutLetters.size) {
+            numberWithLetters += alphabet[numberWithoutLetters[i]]
     }
-    return list2
+    return numberWithLetters
 }
 
 
@@ -291,10 +307,10 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var n = 0
-    var factor = digits.size - 1
+    var factor = pow(base.toDouble(), digits.size - 1.toDouble()).toInt()
     for (i in 0 until digits.size) {
-        n += pow(base.toDouble(), factor.toDouble()).toInt() * digits[i]
-        factor--
+        n += factor * digits[i]
+        factor /= base
     }
     return n
 }
@@ -309,7 +325,18 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var arrayFromString = str.toCharArray()
+    var arrayForLetters = "0123456789abcdefghijklmnopqrstuvwxyz".toCharArray()
+    var number = 0
+    var baseFactor = pow(base.toDouble(), (str.length - 1).toDouble()).toInt()
+    for (i in 0 until arrayFromString.size) {
+        number += arrayForLetters.indexOf(arrayFromString[i]) * baseFactor
+        baseFactor /= base
+    }
+    return number
+}
+
 
 /**
  * Сложная
@@ -352,53 +379,47 @@ fun russian(n: Int): String {
     var halfNumberLeft = n / 1000
     var halfNumberRight = n % 1000
     if (halfNumberLeft != 0) {
-        if (halfNumberLeft in 100..999) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft - (halfNumberLeft % 100))] + " "
-            halfNumberLeft %= 100
+        numberWritten += halfNumberforRus(halfNumberLeft, decimalWritten, numberWritten, decimalRank)
+    }
+    while (halfNumberLeft != 0) {
+        when (halfNumberLeft) {
+            in 5..19 -> {
+                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft)] + " "
+                halfNumberLeft = 0
+            }
+            4 -> {
+                numberWritten += "четыре тысячи"
+                halfNumberLeft = 0
+            }
+            3 -> {
+                numberWritten += "три тысячи"
+                halfNumberLeft = 0
+            }
+            2 -> {
+                numberWritten += "две тысячи"
+                halfNumberLeft = 0
+            }
+            1 -> {
+                numberWritten += "одна тысяча"
+                halfNumberLeft = 0
+            }
         }
-        if (halfNumberLeft in 20..99) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft / 10 * 10)] + " "
-            halfNumberLeft %= 10
-        }
-        if (halfNumberLeft in 5..19) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft)] + " "
-        }
-        if (halfNumberLeft == 4) {
-            numberWritten += "четыре тысячи"
-        }
-        if (halfNumberLeft == 3) {
-            numberWritten += "три тысячи"
-        }
-        if (halfNumberLeft == 2) {
-            numberWritten += "две тысячи"
-        }
-        if (halfNumberLeft == 1) {
-            numberWritten += "одна тысяча"
-        }
-        if (halfNumberLeft !in 1..4) {
-            numberWritten += "тысяч"
-        }
+    }
+    if (n / 1000 % 10 !in 1..4 && n / 1000 > 0) {
+        numberWritten += "тысяч"
     }
     if (n / 1000 != 0 && n % 1000 != 0) {
         numberWritten += " "
     }
-        if (halfNumberRight in 100..999) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight - (halfNumberRight % 100))]
-            halfNumberRight %= 100
-            if (halfNumberRight != 0) {
-                numberWritten += " "
-            }
-        }
-        if (halfNumberRight in 20..99) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight / 10 * 10)]
-            halfNumberRight %= 10
-            if (halfNumberRight != 0) {
-                numberWritten += " "
-            }
-        }
-        if (halfNumberRight != 0) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight)]
-        }
+    numberWritten += halfNumberforRus(halfNumberRight, decimalWritten, numberWritten, decimalRank)
+    if (halfNumberRight % 100 in 11..19) {
+        halfNumberRight %= 100
+    } else {
+        halfNumberRight %= 10
+    }
+    if (halfNumberRight != 0) {
+        numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight)]
+    }
     return numberWritten
 }
 
