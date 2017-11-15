@@ -213,7 +213,7 @@ fun sin(x: Double, eps: Double): Double {
         argument += 2
         component *= pow(xNormalized, 2.0) / (argument * (argument - 1)) * (-1)
         sinX += component
-    } while (component >= eps)
+    } while (abs(component) >= eps)
     return sinX
 }
 
