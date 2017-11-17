@@ -252,7 +252,7 @@ fun mostExpensive(description: String): String {
                 name = namePrice[namePrice.size - 2]
             }
         }
-        name
+        return name
     } catch (e: NumberFormatException) {
         return ""
     }
