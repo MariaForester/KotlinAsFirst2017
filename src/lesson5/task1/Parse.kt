@@ -1,5 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson5.task1
+
+val monthsWritten = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+        "сентября", "октрября", "ноября", "декабря")
+val monthsNumber = listOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
 
 /**
  * Пример
@@ -48,12 +53,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -66,7 +69,22 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    var answer = ""
+    try {
+        if ((parts.size == 3) && (parts[1] in monthsWritten)) {
+            val day = parts[0].toInt()
+            val month = monthsNumber[monthsWritten.indexOf(parts[1])].toInt()
+            val year = parts[2].toInt()
+            answer = String.format("%02d.%02d.%d", day, month, year)
+            return answer
+        }
+    } catch (e: NumberFormatException) {
+        return answer
+    }
+    return answer
+}
 
 /**
  * Средняя
@@ -75,7 +93,22 @@ fun dateStrToDigit(str: String): String = TODO()
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+    var answer = ""
+    try {
+        if ((parts.size == 3) && (parts[0].toInt() in 1..31) && (parts[1].toInt() in 1..12)) {
+            val day = parts[0].toInt()
+            val month = monthsWritten[monthsNumber.indexOf(parts[1])]
+            val year = parts[2].toInt()
+            answer += String.format("%d %s %d", day, month, year)
+            return answer
+        }
+    } catch (e: NumberFormatException) {
+        return answer
+    }
+    return answer
+}
 
 /**
  * Средняя
@@ -89,7 +122,19 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    var answer = ""
+    for (symbol in phone) {
+        if (symbol in '0'..'9' || symbol in listOf('+', '-', '(', ')', ' ')) {
+            if (symbol == '+' || symbol in '0'..'9') {
+                answer += symbol
+            }
+        } else {
+            return ""
+        }
+    }
+    return answer
+}
 
 /**
  * Средняя
@@ -101,7 +146,35 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var maximum = -1
+    var numberString = ""
+    try {
+        for (symbol in jumps) {
+            if (symbol in '0'..'9' || symbol in listOf(' ', '-', '%')) {
+                if (symbol in '0'..'9') {
+                    numberString += symbol
+                } else {
+                    if (numberString.toInt() > maximum) {
+                        maximum = numberString.toInt()
+
+                    }
+                    numberString = "0"
+                }
+                if (numberString.toInt() > maximum) {
+                    maximum = numberString.toInt()
+
+                }
+            } else {
+                return -1
+            }
+        }
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+    return maximum
+}
+
 
 /**
  * Сложная
@@ -115,6 +188,7 @@ fun bestLongJump(jumps: String): Int = TODO()
  */
 fun bestHighJump(jumps: String): Int = TODO()
 
+
 /**
  * Сложная
  *
@@ -124,7 +198,26 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val parts = expression.split(" ")
+    var sum = parts[0].toInt()
+    try {
+        for (i in 1 until parts.size step 2) {
+            when (parts[i]) {
+                "+" -> {
+                    sum += parts[i + 1].toInt()
+                }
+                "-" -> {
+                    sum -= parts[i + 1].toInt()
+                }
+            }
+        }
+    } catch (e: IllegalAccessException) {
+        throw IllegalArgumentException("ForInputString")
+    }
+    return sum
+}
+
 
 /**
  * Сложная
@@ -136,7 +229,6 @@ fun plusMinus(expression: String): Int = TODO()
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int = TODO()
-
 /**
  * Сложная
  *
@@ -148,7 +240,23 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть положительными
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val parts = description.split(";")
+    var price = 0.0
+    var name = ""
+    try {
+        for (component in parts) {
+            val namePrice = component.split(" ")
+            if (namePrice[namePrice.size - 1].toDouble() > price) {
+                price = namePrice[namePrice.size - 1].toDouble()
+                name = namePrice[namePrice.size - 2]
+            }
+        }
+        name
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Сложная
@@ -161,7 +269,57 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val romanDigits = listOf("M", "D", "C", "L", "X", "V", "I")
+    val parts = roman.split("")
+    var answer = 0
+    try {
+        for (i in parts.size - 1 downTo 0) {
+            if (parts[i] in romanDigits) {
+                when (parts[i]) {
+                    "I" -> answer++
+                    "V" -> if (parts[i - 1] == "I") {
+                        answer += 3
+                    } else {
+                        answer += 5
+                    }
+                    "X" -> if (parts[i - 1] == "I") {
+                        answer += 8
+                    } else {
+                        answer += 10
+                    }
+                    "L" -> if (parts[i - 1] == "X") {
+                        answer += 30
+                    } else {
+                        answer += 50
+                    }
+                    "C" -> if (parts[i - 1] == "X") {
+                        answer += 80
+                    } else {
+                        answer += 100
+                    }
+                    "D" -> if (parts[i - 1] == "C") {
+                        answer += 300
+                    } else {
+                        answer += 500
+                    }
+                    "M" -> if (parts[i - 1] == "C") {
+                        answer += 800
+                    } else {
+                        answer += 1000
+                    }
+                }
+            }
+        }
+    } catch (e: NumberFormatException) {
+        answer = -1
+    }
+    if (answer != 0) {
+        return answer
+    } else {
+        return -1
+    }
+}
 
 /**
  * Очень сложная
