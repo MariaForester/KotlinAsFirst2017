@@ -389,6 +389,7 @@ fun russian(n: Int): String {
             }
             else -> {
                 when (halfNumberLeft % 10) {
+                    in 5..9 ->  numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)]
                     4 -> {
                         numberWritten += "четыре тысячи"
                     }
