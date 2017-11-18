@@ -380,21 +380,27 @@ fun russian(n: Int): String {
     val halfNumberRight = n % 1000
     if (halfNumberLeft != 0) {
         numberWritten += halfNumberforRus(halfNumberLeft, decimalWritten, numberWritten, decimalRank)
-        if (halfNumberLeft % 100 in 5..19) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)]
-        } else {
-            when (halfNumberLeft % 10) {
-                4 -> {
-                    numberWritten += "четыре тысячи"
-                }
-                3 -> {
-                    numberWritten += "три тысячи"
-                }
-                2 -> {
-                    numberWritten += "две тысячи"
-                }
-                1 -> {
-                    numberWritten += "одна тысяча"
+        when (halfNumberLeft % 100) {
+            in 5..9 -> {
+                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)]
+            }
+            in 10..19 -> {
+                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)]
+            }
+            else -> {
+                when (halfNumberLeft % 10) {
+                    4 -> {
+                        numberWritten += "четыре тысячи"
+                    }
+                    3 -> {
+                        numberWritten += "три тысячи"
+                    }
+                    2 -> {
+                        numberWritten += "две тысячи"
+                    }
+                    1 -> {
+                        numberWritten += "одна тысяча"
+                    }
                 }
             }
         }
