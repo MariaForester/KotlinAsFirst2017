@@ -9,9 +9,9 @@ import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
 
-fun halfNumberforRus(halfNumber: Int, decimalWritten: List<String>, decimalRank: List<Int>): String {
+fun halfNumberforRus(halfNumber: Int, decimalWritten: List<String>, numberWritten: String, decimalRank: List<Int>): String {
     var half = halfNumber
-    var string = ""
+    var string = numberWritten
     if (half in 100..999) {
         string += decimalWritten[decimalRank.indexOf(half - (half % 100))]
         half %= 100
@@ -370,7 +370,7 @@ fun roman(n: Int): String {
 fun russian(n: Int): String {
     var decimalRank = listOf(900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 19,
             18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-    var decimalWritten = listOf("девятьсот", "восемьсот", "семьсот", "шестьсот", "пятьсот", "четыреста",
+    var decimalWritten = listOf("девятьсот", "восемьсот ", "семьсот", "шестьсот", "пятьсот", "четыреста",
             "триста", "двести", "сто", "девяносто", "восемьдесят", "семьдесят", "шестьдесят", "пятьдесят", "сорок",
             "тридцать", "двадцать", "девятнадцать", "восемнадцать", "семнадцать", "шестнадцать", "пятнадцать",
             "четырнадцать", "тринадцать", "двенадцать", "одиннадцать", "десять", "девять", "восемь", "семь", "шесть",
@@ -379,9 +379,9 @@ fun russian(n: Int): String {
     val halfNumberLeft = n / 1000
     val halfNumberRight = n % 1000
     if (halfNumberLeft != 0) {
-        numberWritten += halfNumberforRus(halfNumberLeft, decimalWritten, decimalRank)
+        numberWritten += halfNumberforRus(halfNumberLeft, decimalWritten, numberWritten, decimalRank)
         if (halfNumberLeft % 100 in 5..19) {
-            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft)] + " "
+            numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)]
         } else {
             when (halfNumberLeft % 10) {
                 4 -> {
@@ -400,16 +400,19 @@ fun russian(n: Int): String {
         }
     }
     if (halfNumberLeft % 10 !in 1..4 && n / 1000 > 0) {
-        numberWritten += "тысяч"
+        numberWritten += " тысяч"
     }
     if (halfNumberLeft != 0 && n % 1000 != 0) {
         numberWritten += " "
     }
-    numberWritten += halfNumberforRus(halfNumberRight, decimalWritten, decimalRank)
+    numberWritten = halfNumberforRus(halfNumberRight, decimalWritten, numberWritten, decimalRank)
     if (halfNumberRight % 100 in 11..19) {
-         numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight % 100)]
+        numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight % 100)]
+    } else {
+        if (n % 10 != 0) {
+            numberWritten += decimalWritten[decimalRank.indexOf(n % 10)]
+        }
     }
-    numberWritten += decimalWritten[decimalRank.indexOf(n % 10)]
     return (numberWritten)
 }
 

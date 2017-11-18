@@ -150,7 +150,7 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть положительными
  */
 fun mostExpensive(description: String): String = TODO()
-}
+
 
 /**
  * Сложная
