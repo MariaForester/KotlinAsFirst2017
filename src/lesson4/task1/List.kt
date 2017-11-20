@@ -413,7 +413,7 @@ fun russian(n: Int): String {
         numberWritten += " "
     }
     numberWritten = halfNumberforRus(halfNumberRight, decimalWritten, numberWritten, decimalRank)
-    if (halfNumberRight % 100 in 11..19) {
+    if (halfNumberRight % 100 in 10..19) {
         numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight % 100)]
     } else {
         if (n % 10 != 0) {
