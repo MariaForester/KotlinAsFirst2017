@@ -6,13 +6,11 @@ import lesson1.task1.sqr
 import java.lang.Math.*
 
 fun sequenceDigit(number: Int, position: Int): Int {
-        var sequenceToChange = number
-        if (position != 0) {
-            for (i in 1..position) {
-                sequenceToChange /= 10
-            }
-        }
-        return sequenceToChange % 10
+    var sequenceToChange = number
+    for (i in 1..position) {
+        sequenceToChange /= 10
+    }
+    return sequenceToChange % 10
 }
 
 /**
@@ -216,9 +214,6 @@ fun sin(x: Double, eps: Double): Double {
     } while (abs(component) >= eps)
     return sinX
 }
-
-
-
 
 
 /**
