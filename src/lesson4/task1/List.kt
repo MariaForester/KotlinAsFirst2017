@@ -8,25 +8,32 @@ import lesson3.task1.isPrime
 import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
+var decimalRank = listOf(900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 19,
+        18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+var decimalWritten = listOf("девятьсот", "восемьсот", "семьсот", "шестьсот", "пятьсот", "четыреста",
+        "триста", "двести", "сто", "девяносто", "восемьдесят", "семьдесят", "шестьдесят", "пятьдесят", "сорок",
+        "тридцать", "двадцать", "девятнадцать", "восемнадцать", "семнадцать", "шестнадцать", "пятнадцать",
+        "четырнадцать", "тринадцать", "двенадцать", "одиннадцать", "десять", "девять", "восемь", "семь", "шесть",
+        "пять", "четыре", "три", "два", "один")
 
-fun halfNumberforRus(halfNumber: Int, decimalWritten: List<String>, numberWritten: String, decimalRank: List<Int>): String {
-    var half = halfNumber
-    var string = numberWritten
-    if (half in 100..999) {
-        string += decimalWritten[decimalRank.indexOf(half - (half % 100))]
-        half %= 100
-        if (half != 0) {
-            string += " "
+fun threeDigitNumberToRus(threeDigitNumber: Int): String {
+    var number = threeDigitNumber
+    var word = ""
+    if (number in 100..999) {
+        word += decimalWritten[decimalRank.indexOf(number - (number % 100))]
+        number %= 100
+        if (number != 0) {
+            word += " "
         }
     }
-    if (half in 20..99) {
-        string += decimalWritten[decimalRank.indexOf(half / 10 * 10)]
-        half %= 10
-        if (half != 0) {
-            string += " "
+    if (number in 20..99) {
+        word += decimalWritten[decimalRank.indexOf(number / 10 * 10)]
+        number %= 10
+        if (number != 0) {
+            word += " "
         }
     }
-    return string
+    return word
 }
 
 
@@ -291,8 +298,8 @@ fun convertToString(n: Int, base: Int): String {
     val alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
     val numberWithoutLetters = convert(n, base)
     var numberWithLetters = ""
-    for (i in 0 until numberWithoutLetters.size) {
-        numberWithLetters += alphabet[numberWithoutLetters[i]]
+    for (component in  numberWithoutLetters) {
+        numberWithLetters += alphabet[component]
     }
     return numberWithLetters
 }
@@ -368,58 +375,42 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var decimalRank = listOf(900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 19,
-            18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-    var decimalWritten = listOf("девятьсот", "восемьсот", "семьсот", "шестьсот", "пятьсот", "четыреста",
-            "триста", "двести", "сто", "девяносто", "восемьдесят", "семьдесят", "шестьдесят", "пятьдесят", "сорок",
-            "тридцать", "двадцать", "девятнадцать", "восемнадцать", "семнадцать", "шестнадцать", "пятнадцать",
-            "четырнадцать", "тринадцать", "двенадцать", "одиннадцать", "десять", "девять", "восемь", "семь", "шесть",
-            "пять", "четыре", "три", "два", "один")
     var numberWritten = ""
     val halfNumberLeft = n / 1000
     val halfNumberRight = n % 1000
     if (halfNumberLeft != 0) {
-        numberWritten += halfNumberforRus(halfNumberLeft, decimalWritten, numberWritten, decimalRank)
+        numberWritten += threeDigitNumberToRus(halfNumberLeft)
         when (halfNumberLeft % 100) {
             in 5..9 -> {
-                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)]
+                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысяч"
             }
             in 10..19 -> {
-                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)]
+                numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)] + " тысяч"
             }
             else -> {
                 when (halfNumberLeft % 10) {
-                    in 5..9 ->  numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)]
-                    4 -> {
-                        numberWritten += "четыре тысячи"
-                    }
-                    3 -> {
-                        numberWritten += "три тысячи"
-                    }
+                    in 5..9 ->  numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысяч"
+                    in 3..4 -> numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысячи"
                     2 -> {
                         numberWritten += "две тысячи"
                     }
                     1 -> {
                         numberWritten += "одна тысяча"
                     }
+                    0 -> numberWritten += " тысяч"
                 }
             }
         }
     }
-    if (halfNumberLeft % 10 !in 1..4 && n / 1000 > 0) {
-        numberWritten += " тысяч"
-    }
     if (halfNumberLeft != 0 && n % 1000 != 0) {
         numberWritten += " "
     }
-    numberWritten = halfNumberforRus(halfNumberRight, decimalWritten, numberWritten, decimalRank)
+    numberWritten += threeDigitNumberToRus(halfNumberRight)
     if (halfNumberRight % 100 in 10..19) {
         numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight % 100)]
-    } else {
-        if (n % 10 != 0) {
+    } else if (n % 10 != 0) {
             numberWritten += decimalWritten[decimalRank.indexOf(n % 10)]
         }
-    }
     return (numberWritten)
 }
 
