@@ -71,19 +71,17 @@ fun main(args: Array<String>) {
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    var answer = ""
-    try {
-        if ((parts.size == 3) && (parts[1] in monthsWritten)) {
-            val day = parts[0].toInt()
-            val month = monthsNumber[monthsWritten.indexOf(parts[1])].toInt()
-            val year = parts[2]
-            answer = String.format("%02d.%02d.%s", day, month, year)
-            return answer
+    if ((parts.size == 3) && (parts[1] in monthsWritten)) {
+        val day = parts[0].toInt()
+        val month = monthsNumber[monthsWritten.indexOf(parts[1])].toInt()
+        val year = parts[2]
+        try {
+            return String.format("%02d.%02d.%s", day, month, year)
+        } catch (e: NumberFormatException) {
+            return ""
         }
-    } catch (e: NumberFormatException) {
-        return answer
     }
-    return answer
+    return ""
 }
 
 /**
@@ -95,19 +93,17 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
-    var answer = ""
     try {
         if ((parts.size == 3) && (parts[0].toInt() in 1..31) && (parts[1].toInt() in 1..12)) {
             val day = parts[0].toInt()
             val month = monthsWritten[monthsNumber.indexOf(parts[1])]
             val year = parts[2].toInt()
-            answer += String.format("%d %s %d", day, month, year)
-            return answer
+            return String.format("%d %s %d", day, month, year)
         }
     } catch (e: NumberFormatException) {
-        return answer
+        return ""
     }
-    return answer
+    return ""
 }
 
 /**
@@ -124,13 +120,13 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     var answer = ""
-    for (symbol in phone) {
-        if (symbol in '0'..'9' || symbol in listOf('+', '-', '(', ')', ' ')) {
-            if (symbol == '+' || symbol in '0'..'9') {
-                answer += symbol
+    val parts = phone.split("")
+    val stringIsAppropriate = phone.matches(Regex("""\+?[\s\d-()]+"""))
+    if (stringIsAppropriate) {
+        for (part in parts) {
+            if (part in "+0123456789") {
+                answer += part
             }
-        } else {
-            return ""
         }
     }
     return answer
@@ -174,24 +170,24 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     val parts = jumps.split(" ")
-    val stringIsAppropriate = jumps.matches(Regex("""[\s%-+\d]+"""))
+    val stringIsAppropriate = jumps.matches(Regex("""\+?[\s\d+%-]+"""))
     if (!stringIsAppropriate) {
         return -1
     }
-    try {
-        var maximum = 0
-        for (i in 0 until parts.size - 1) {
-            val partIsNumber = parts[i].matches(Regex("""[\d]+"""))
+    var maximum = 0
+    for (i in 0 until parts.size - 1) {
+        val partIsNumber = parts[i].matches(Regex("""[\d]+"""))
+        try {
             if (partIsNumber) {
-                if ((parts[i].toInt() >= maximum) && (parts[i+1] == "+")) {
+                if ((parts[i].toInt() >= maximum) && (parts[i + 1] == "+")) {
                     maximum = parts[i].toInt()
                 }
             }
+        } catch (e: NumberFormatException) {
+            return -1
         }
-        return maximum
-    } catch (e: NumberFormatException) {
-        return -1
     }
+    return maximum
 }
 
 
@@ -250,21 +246,22 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть положительными
  */
 fun mostExpensive(description: String): String {
-    val parts = description.split(";")
+    var descriptionCut = description.trim()
+    val parts = descriptionCut.split(";")
     var price = 0.0
     var name = ""
-    try {
-        for (component in parts) {
-            val namePrice = component.split(" ")
-            if (namePrice[namePrice.size - 1].toDouble() >= price) {
-                price = namePrice[namePrice.size - 1].toDouble()
-                name = namePrice[namePrice.size - 2]
+    for (part in parts) {
+        val component = part.split(" ")
+        try {
+            if (component.last().toDouble() >= price) {
+                price = component.last().toDouble()
+                name = component[component.size - 2]
             }
+        } catch (e: NumberFormatException) {
+            return ""
         }
-        return name
-    } catch (e: NumberFormatException) {
-        return ""
     }
+    return name
 }
 
 
@@ -281,58 +278,34 @@ fun mostExpensive(description: String): String {
  */
 fun fromRoman(roman: String): Int {
     val romanDigits = listOf("M", "D", "C", "L", "X", "V", "I")
-    val parts = roman.split("")
-    var answer = 0
-    val list = parts.filter {
-        (it == "M") && (it == "D") && (it == "C") && (it == "L") && (it == "X")
-                && (it == "V") && (it == "I")
-    }
-    if (list.isEmpty()) {
-        try {
-            for (i in parts.size - 1 downTo 0) {
-                if (parts[i] in romanDigits) {
-                    when (parts[i]) {
-                        "I" -> answer++
-                        "V" -> if (parts[i - 1] == "I") {
-                            answer += 3
-                        } else {
-                            answer += 5
-                        }
-                        "X" -> if (parts[i - 1] == "I") {
-                            answer += 8
-                        } else {
-                            answer += 10
-                        }
-                        "L" -> if (parts[i - 1] == "X") {
-                            answer += 30
-                        } else {
-                            answer += 50
-                        }
-                        "C" -> if (parts[i - 1] == "X") {
-                            answer += 80
-                        } else {
-                            answer += 100
-                        }
-                        "D" -> if (parts[i - 1] == "C") {
-                            answer += 300
-                        } else {
-                            answer += 500
-                        }
-                        "M" -> if (parts[i - 1] == "C") {
-                            answer += 800
-                        } else {
-                            answer += 1000
-                        }
-                    }
-                }
-            }
-            return answer
-        } catch (e: NumberFormatException) {
-            return -1
-        }
-    } else {
+    val romanValues = listOf(1000, 500, 100, 50, 10, 5, 1)
+    if (roman == "") {
         return -1
     }
+    val parts = roman.split("")
+    var answer = 0
+    if (roman.length == 1) {
+        answer += romanValues[romanDigits.indexOf(roman)]
+    }
+    else {
+        for (part in 0 until parts.size - 1) {
+            if (parts[part] in romanDigits) {
+                try {
+                    val component1 = romanValues[romanDigits.indexOf(parts[part])]
+                    val component2 = romanValues[romanDigits.indexOf(parts[part + 1])]
+                    if (component1 >= component2) {
+                        answer += component1
+                    } else {
+                        answer += (component2 - component1)
+                    }
+                    answer += romanValues[romanDigits.indexOf(parts[parts.size - 1])]
+                } catch (e: NumberFormatException) {
+                    return -1
+                }
+            }
+        }
+    }
+    return answer
 }
 
 
