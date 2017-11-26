@@ -176,7 +176,7 @@ fun bestHighJump(jumps: String): Int {
     }
     var maximum = 0
     for (i in 0 until parts.size - 1) {
-        val partIsNumber = parts[i].matches(Regex("""[\d]+"""))
+        val partIsNumber = parts[i].matches(Regex("""\+?[\d]+"""))
         try {
             if (partIsNumber) {
                 if ((parts[i].toInt() >= maximum) && (parts[i + 1] == "+")) {
