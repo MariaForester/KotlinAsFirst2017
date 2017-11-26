@@ -44,7 +44,7 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    if (notation.first() !in columns || notation.length != 2) {
+    if (notation.first() !in columns || notation.length != 2 || notation == "") {
         throw IllegalArgumentException()
     }
     val column = columns.indexOf(notation.first()) + 1
@@ -134,12 +134,10 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    if (start == end) {
-        return 0
-    }
     if (start.inside() && end.inside()) {
         return when {
             (start.column + end.column + start.row + end.row) % 2 != 0 -> -1
+            start == end -> 0
             abs(start.column - end.column) == abs(start.row - end.row) -> 1
             else -> 2
         }
@@ -189,14 +187,11 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
-    if (start == end) {
-        return 0
-    }
     if (start.inside() && end.inside()) {
-       if (abs(start.column - end.column) >= abs(start.row - end.row)) {
-           return abs(start.column - end.column)
-       } else {
-           return abs(start.row - end.row)
+        return when {
+            abs(start.column - end.column) >= abs(start.row - end.row) -> abs(start.column - end.column)
+            start == end -> 0
+            else -> return abs(start.row - end.row)
         }
     } else {
         throw IllegalArgumentException()
