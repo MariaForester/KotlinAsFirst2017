@@ -23,7 +23,6 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String = TODO()
 }
-
 /**
  * Простая
  *
