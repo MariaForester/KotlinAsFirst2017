@@ -80,14 +80,11 @@ fun square(notation: String): Square {
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
-    if (start == end) {
-        return 0
-    }
     if (start.inside() && end.inside()) {
-        if (start.column == end.column || start.row == end.row) {
-            return 1
-        } else {
-            return 2
+        return when {
+            start == end -> 0
+            start.column == end.column || start.row == end.row -> 1
+            else -> 2
         }
     } else {
         throw IllegalArgumentException()
