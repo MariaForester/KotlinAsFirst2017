@@ -215,10 +215,8 @@ fun plusMinus(expression: String): Int {
             }
         }
         return sum
-    } catch (e: IllegalAccessException) {
-        throw IllegalAccessException("ForInputString")
-    } catch (e: NumberFormatException) {
-        throw IllegalAccessException("ForInputString")
+    } catch (e: IllegalArgumentException) {
+        throw IllegalArgumentException()
     }
 }
 
