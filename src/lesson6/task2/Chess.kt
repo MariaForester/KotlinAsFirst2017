@@ -193,10 +193,10 @@ fun kingMoveNumber(start: Square, end: Square): Int {
         return 0
     }
     if (start.inside() && end.inside()) {
-        return when {
-            start == end -> 0
-            abs(start.column - end.column) >= abs(start.row - end.row) -> abs(start.column - end.column)
-            else -> abs(start.row - end.row)
+       if (abs(start.column - end.column) >= abs(start.row - end.row)) {
+           return abs(start.column - end.column)
+       } else {
+           return abs(start.row - end.row)
         }
     } else {
         throw IllegalArgumentException()
