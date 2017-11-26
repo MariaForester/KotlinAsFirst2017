@@ -179,7 +179,7 @@ fun bestHighJump(jumps: String): Int {
         val partIsNumber = parts[i].matches(Regex("""\+?[\d]+"""))
         try {
             if (partIsNumber) {
-                if ((parts[i].toInt() >= maximum) && (parts[i + 1] == "+")) {
+                if ((parts[i].toInt() > maximum) && (parts[i + 1] == "+")) {
                     maximum = parts[i].toInt()
                 }
             }
