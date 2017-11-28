@@ -8,6 +8,7 @@ import lesson3.task1.isPrime
 import java.lang.Double.NaN
 import java.lang.Math.sqrt
 import java.lang.Math.pow
+
 var decimalRank = listOf(900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 19,
         18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
 var decimalWritten = listOf("девятьсот", "восемьсот", "семьсот", "шестьсот", "пятьсот", "четыреста",
@@ -298,7 +299,7 @@ fun convertToString(n: Int, base: Int): String {
     val alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
     val numberWithoutLetters = convert(n, base)
     var numberWithLetters = ""
-    for (component in  numberWithoutLetters) {
+    for (component in numberWithoutLetters) {
         numberWithLetters += alphabet[component]
     }
     return numberWithLetters
@@ -388,16 +389,12 @@ fun russian(n: Int): String {
                 numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 100)] + " тысяч"
             }
             else -> {
-                when (halfNumberLeft % 10) {
-                    in 5..9 ->  numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысяч"
-                    in 3..4 -> numberWritten += decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысячи"
-                    2 -> {
-                        numberWritten += "две тысячи"
-                    }
-                    1 -> {
-                        numberWritten += "одна тысяча"
-                    }
-                    0 -> numberWritten += " тысяч"
+                numberWritten += when (halfNumberLeft % 10) {
+                    in 5..9 -> decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысяч"
+                    in 3..4 -> decimalWritten[decimalRank.indexOf(halfNumberLeft % 10)] + " тысячи"
+                    2 -> "две тысячи"
+                    1 -> "одна тысяча"
+                    else -> " тысяч"
                 }
             }
         }
@@ -409,8 +406,8 @@ fun russian(n: Int): String {
     if (halfNumberRight % 100 in 10..19) {
         numberWritten += decimalWritten[decimalRank.indexOf(halfNumberRight % 100)]
     } else if (n % 10 != 0) {
-            numberWritten += decimalWritten[decimalRank.indexOf(n % 10)]
-        }
+        numberWritten += decimalWritten[decimalRank.indexOf(n % 10)]
+    }
     return (numberWritten)
 }
 
