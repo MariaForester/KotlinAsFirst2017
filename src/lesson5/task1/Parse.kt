@@ -291,37 +291,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 
-//fun fromRoman(roman: String): Int {
-//    val romanDigits = listOf('M', 'D', 'C', 'L', 'X', 'V', 'I')
-//    val romanValues = listOf(1000, 500, 100, 50, 10, 5, 1)
-//    if (roman == "") {
-//        return -1
-//    }
-//    var answer = 0
-//    if (roman.length == 1) {
-//        return romanValues[romanDigits.indexOf(roman[0])]
-//    }
-//    var part = 0
-//    while (part < roman.length){
-//        val index1 = romanDigits.indexOf(roman[part])
-//        val index2 = romanDigits.indexOf(roman[part + 1])
-//        val component1 = romanValues[index1]
-//        val component2 = romanValues[index2]
-//        if (roman[part] in romanDigits) {
-//            if (component1 >= component2) {
-//                answer += component1
-//                part += 2
-//            }
-//        }
-//             else {
-//                answer += (component2 - component1)
-//                part++
-//            }
-//        }
-//    answer += romanValues[romanDigits.indexOf(roman[roman.length - 1])]
-//    return answer
-//}
-
+fun fromRoman(roman: String): Int = TODO()
 
 
 /**
