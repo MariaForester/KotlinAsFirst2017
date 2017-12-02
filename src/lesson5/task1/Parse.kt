@@ -296,19 +296,22 @@ fun fromRoman(roman: String): Int {
     val valuesList = listOf(1, 5, 10, 50, 100, 500, 1000)
     var numberValue = 0
     var previousNumber = 0
-        for (i in roman.length - 1 downTo 0) {
-            if (roman[i].toString() !in lettersList) {
-                return -1
-            }
-            val currentNumber = valuesList[lettersList.indexOf(roman[i].toString())]
-            if (currentNumber < previousNumber) {
-                numberValue -= currentNumber
-            } else {
-                numberValue += currentNumber
-                previousNumber = currentNumber
-            }
+    if (roman == "") {
+        return -1
+    }
+    for (i in roman.length - 1 downTo 0) {
+        if (roman[i].toString() !in lettersList) {
+            return -1
         }
-        return numberValue
+        val currentNumber = valuesList[lettersList.indexOf(roman[i].toString())]
+        if (currentNumber < previousNumber) {
+            numberValue -= currentNumber
+        } else {
+            numberValue += currentNumber
+            previousNumber = currentNumber
+        }
+    }
+    return numberValue
 }
 
 
