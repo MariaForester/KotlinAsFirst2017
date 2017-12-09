@@ -166,10 +166,6 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     val parts = jumps.split(" ")
-    val stringIsAppropriate = jumps.matches(Regex("""(\d+[\s+%-]+)+"""))
-    if (!stringIsAppropriate) {
-        return -1
-    }
     var maximum = -1
     var currentNumber = 0
     for (i in 0 until parts.size - 1 step 2) {
