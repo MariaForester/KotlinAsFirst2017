@@ -47,7 +47,7 @@ fun square(notation: String): Square {
     if (notation == "" || notation[0] !in columns || notation.length != 2) {
         throw IllegalArgumentException()
     }
-    val column = columns.indexOf(notation[0] + 1)
+    val column = columns.indexOf(notation[0]) + 1
     try {
         val row = notation[notation.length - 1].toString().toInt()
         return Square(column, row)
