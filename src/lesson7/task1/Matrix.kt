@@ -42,34 +42,63 @@ interface Matrix<E> {
  * Бросить исключение IllegalArgumentException, если height или width <= 0.
  */
 fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> {
-  TODO()
+    if (height <= 0 || width <= 0) {
+        throw IllegalArgumentException()
+    }
+    return  MatrixImpl<E>(height, width, e)
 }
+
 
 /**
  * Средняя сложность
  *
  * Реализация интерфейса "матрица"
  */
-class MatrixImpl<E> : Matrix<E> {
+class MatrixImpl<E>(override val height: Int, override val width: Int, e: E) : Matrix<E> {
 
-    override val height: Int = TODO()
+    private val list = mutableListOf<E>()
+    init {
+        for (i in 0 until height * width) {
+            list.add(e)
+        }
+    }
 
-    override val width: Int = TODO()
+    override fun get(row: Int, column: Int): E = get(row, column)
 
-    override fun get(row: Int, column: Int): E = TODO()
-
-    override fun get(cell: Cell): E = TODO()
+    override fun get(cell: Cell): E = get(cell.row, cell.column)
 
     override fun set(row: Int, column: Int, value: E) {
-        TODO()
+        set(row, column, value)
     }
 
     override fun set(cell: Cell, value: E) {
-        TODO()
+        set(cell.row, cell.column, value)
     }
 
     override fun equals(other: Any?) =
-            TODO()
-    override fun toString(): String =   TODO()
+            other is MatrixImpl<*> &&
+                    height == other.height &&
+                    width == other.width
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("[")
+        for (row in 0 until height) {
+            sb.append("[")
+            for (column in 0 until width) {
+                sb.append(this[row, column])
+            }
+            sb.append("]")
+        }
+        sb.append("]")
+        return "$sb"
+    }
+
+    override fun hashCode(): Int {
+        var result = 5
+        result = result * 1 + height
+        result = result * 31 + width
+        return result
+    }
 }
 
