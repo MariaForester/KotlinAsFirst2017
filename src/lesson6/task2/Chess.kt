@@ -29,7 +29,7 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         return if (inside()) {
-            (column + 96).toChar() + row.toString()
+            columns[column - 1] + row.toString()
         } else {
             ""
         }
@@ -44,12 +44,12 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    if (columns.filter { it == notation.first() }.isEmpty() || notation.length != 2) {
+    if (notation[0] !in columns || notation.length != 2) {
         throw IllegalArgumentException()
     }
-    val column = notation.first().toInt() - 96
+    val column = notation[0].toInt() - 96
     try {
-        val row = notation.last().toString().toInt()
+        val row = notation[notation.length - 1].toString().toInt()
         return Square(column, row)
     } catch (e: NumberFormatException) {
         throw IllegalArgumentException()
@@ -175,7 +175,36 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
  *          bishopTrajectory(Square(1, 3), Square(6, 8)) = listOf(Square(1, 3), Square(6, 8))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun bishopTrajectory(start: Square, end: Square): List<Square> {
+    val squares = mutableListOf<Square>()
+    if (!(start.inside() && end.inside())) {
+        throw IllegalArgumentException()
+    }
+    when {
+        start == end -> {
+            squares += Square(start.column, start.row)
+            return squares
+        }
+        abs(end.row - start.row) == abs(end.column - start.column) -> {
+            squares += start
+            squares += end
+            return squares
+        }
+        else -> {
+            for (i in 1..8) {
+                for (j in 1..8) {
+                    if (abs(start.column - i) == abs(start.row - j) && abs(end.column - i) == abs(end.row - j)) {
+                        squares += start
+                        squares += Square(i, j)
+                        squares += end
+                        return squares
+                    }
+                }
+            }
+        }
+    }
+    return listOf()
+}
 
 /**
  * Средняя

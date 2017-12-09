@@ -74,12 +74,12 @@ fun dateStrToDigit(str: String): String {
     var day = 0
     var month = 0
     if ((parts.size != 3) || (parts[1] !in monthsWritten)) return ""
-    try {
-        day = parts[0].toInt()
-        month = monthsWritten.indexOf(parts[1]) + 1
+    day = try {
+        parts[0].toInt()
     } catch (e: NumberFormatException) {
         return ""
     }
+    month = monthsWritten.indexOf(parts[1]) + 1
     val year = parts[2]
     return String.format("%02d.%02d.%s", day, month, year)
 }
@@ -122,18 +122,10 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    var answer = ""
-    val parts = phone.split("")
-    val stringIsAppropriate = phone.matches(Regex("""\+?+[\s\d-()]+"""))
-    if (!stringIsAppropriate) {
+    if (!phone.matches(Regex("""\+?+[\s\d-()]+"""))) {
         return ""
     }
-    for (part in parts) {
-        if (part in "+0123456789") {
-            answer += part.toString()
-        }
-    }
-    return answer
+    return phone.filter { it !in listOf('-', '(', ')', ' ') }
 }
 
 /**
@@ -174,15 +166,16 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     val parts = jumps.split(" ")
-    val stringIsAppropriate = jumps.matches(Regex("""[\s\d-%+]+"""))
+    val stringIsAppropriate = jumps.matches(Regex("""(\d+[\s+%-]+)+"""))
     if (!stringIsAppropriate) {
         return -1
     }
     var maximum = -1
     var currentNumber = 0
     for (i in 0 until parts.size - 1 step 2) {
-        try {
-            currentNumber = parts[i].toInt()
+
+        currentNumber = try {
+            parts[i].toInt()
         } catch (e: NumberFormatException) {
             return -1
         }
@@ -260,7 +253,7 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     val descriptionCut = description.trim()
-    val parts = descriptionCut.trim().split(";")
+    val parts = descriptionCut.split("; ")
     var price = 0.0
     var name = ""
     for (part in parts) {
