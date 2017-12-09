@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER", "unused")
+
 package lesson7.task1
 
 /**
@@ -21,6 +22,7 @@ interface Matrix<E> {
      * Методы могут бросить исключение, если ячейка не существует или пуста
      */
     operator fun get(row: Int, column: Int): E
+
     operator fun get(cell: Cell): E
 
     /**
@@ -28,6 +30,7 @@ interface Matrix<E> {
      * Методы могут бросить исключение, если ячейка не существует
      */
     operator fun set(row: Int, column: Int, value: E)
+
     operator fun set(cell: Cell, value: E)
 }
 
@@ -39,15 +42,7 @@ interface Matrix<E> {
  * Бросить исключение IllegalArgumentException, если height или width <= 0.
  */
 fun <E> createMatrix(height: Int, width: Int, e: E): Matrix<E> {
-    if (height <= 0 || width <= 0) {
-        throw IllegalArgumentException()
-    }
-val list = mutableListOf<E>()
-    for (i in 0..height * width) {
-        list.add(e)
-    }
-
-    throw IllegalArgumentException()
+  TODO()
 }
 
 /**
@@ -61,9 +56,9 @@ class MatrixImpl<E> : Matrix<E> {
 
     override val width: Int = TODO()
 
-    override fun get(row: Int, column: Int): E  = TODO()
+    override fun get(row: Int, column: Int): E = TODO()
 
-    override fun get(cell: Cell): E  = TODO()
+    override fun get(cell: Cell): E = TODO()
 
     override fun set(row: Int, column: Int, value: E) {
         TODO()
@@ -73,8 +68,8 @@ class MatrixImpl<E> : Matrix<E> {
         TODO()
     }
 
-    override fun equals(other: Any?) = TODO()
-
-    override fun toString(): String = TODO()
+    override fun equals(other: Any?) =
+            TODO()
+    override fun toString(): String =   TODO()
 }
 
