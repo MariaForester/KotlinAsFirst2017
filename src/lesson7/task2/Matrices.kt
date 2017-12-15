@@ -83,7 +83,7 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
         }
         countWidth--
         if (row < countHeight) {
-            for (i in countWidth - 1 downTo 0) {
+            for (i in countWidth - 1 downTo column) {
                 result[countHeight - 1, i] = count++
             }
             countHeight--
