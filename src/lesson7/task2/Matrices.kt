@@ -5,6 +5,7 @@ package lesson7.task2
 import com.sun.javafx.fxml.expression.Expression.multiply
 import lesson7.task1.Matrix
 import lesson7.task1.createMatrix
+import lesson8.task1.countSubstrings
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -61,7 +62,41 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    var row = 0
+    var column = 0
+    var count = 1
+    var countWidth = width
+    var countHeight = height
+    var result = createMatrix(height, width, e = 0)
+    if (width == 1 && height == 1) {
+        result[0, 0] = 1
+        return result
+    }
+    while (row < countHeight && column < countWidth) {
+        for (i in column until countWidth) {
+            result[row, i] = count++
+        }
+        row++
+        for (i in row until countHeight) {
+            result[i, countWidth - 1] = count++
+        }
+        countWidth--
+        if (row < countHeight) {
+            for (i in countWidth - 1 downTo 0) {
+                result[countHeight - 1, i] = count++
+            }
+            countHeight--
+        }
+        if (column < countWidth) {
+            for (i in countHeight - 1 downTo row) {
+                result[i, column] = count++
+            }
+            column++
+        }
+    }
+    return result
+}
 
 
 /**
@@ -122,7 +157,8 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
         for (j in 0 until result.height) {
             val rsquareSubstitute = result[i, j]
             result[i, j] = result[result.height - 1, j]
-            result[result.height - 1 - i, j] = rsquareSubstitute        }
+            result[result.height - 1 - i, j] = rsquareSubstitute
+        }
     }
     return result
 }
