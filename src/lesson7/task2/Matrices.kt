@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson7.task2
 
 import com.sun.javafx.fxml.expression.Expression.multiply
@@ -62,6 +63,7 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  */
 fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
 
+
 /**
  * Сложная
  *
@@ -104,7 +106,26 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    if (matrix.height != matrix.width) {
+        throw IllegalArgumentException()
+    }
+    val result = matrix
+    for (i in 0 until result.height) {
+        for (j in 0 until result.height - 1 - i) {
+            val component = result[i, j]
+            result[i, j] = result[result.height - 1 - j, result.height - 1 - i]
+            result[result.height - 1 - j, result.height - 1 - i] = component
+        }
+    }
+    for (i in 0 until result.height / 2) {
+        for (j in 0 until result.height) {
+            val rsquareSubstitute = result[i, j]
+            result[i, j] = result[result.height - 1, j]
+            result[result.height - 1 - i, j] = rsquareSubstitute        }
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -206,8 +227,8 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
  * Инвертировать заданную матрицу.
  * При инвертировании знак каждого элемента матрицы следует заменить на обратный
  */
-operator fun Matrix<Int>.unaryMinus(): Matrix<Int>  {
-   val result = createMatrix(height, width, this[0, 0])
+operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
+    val result = createMatrix(height, width, this[0, 0])
     for (i in 0 until height) {
         for (j in 0 until width) {
             result[i, j] = -this[i, j]
@@ -225,6 +246,7 @@ operator fun Matrix<Int>.unaryMinus(): Matrix<Int>  {
  * Подробно про порядок умножения см. статью Википедии "Умножение матриц".
  */
 operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO()
+
 
 /**
  * Сложная
