@@ -5,7 +5,7 @@ package lesson6.task2
 import java.lang.Math.abs
 
 val columns: List<Char> = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-
+fun squaresAreInside(start: Square, end: Square) = start.inside() && end.inside()
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -29,7 +29,7 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         return if (inside()) {
-            columns[column - 1] + row.toString()
+            (column + 96).toChar() + row.toString()
         } else {
             ""
         }
@@ -48,12 +48,12 @@ fun square(notation: String): Square {
         throw IllegalArgumentException()
     }
     val column = columns.indexOf(notation[0]) + 1
-    try {
-        val row = notation[notation.length - 1].toString().toInt()
-        return Square(column, row)
+    val row = try {
+        notation[notation.length - 1].toString().toInt()
     } catch (e: NumberFormatException) {
         throw IllegalArgumentException()
     }
+    return Square(column, row)
 }
 
 /**
@@ -80,7 +80,7 @@ fun square(notation: String): Square {
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
-    if (!start.inside() || !end.inside()) {
+    if (!squaresAreInside(start, end)) {
         throw IllegalArgumentException()
     }
     return when {
@@ -146,7 +146,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    if (!start.inside() || !end.inside()) {
+    if (!squaresAreInside(start, end)) {
         throw IllegalArgumentException()
     }
     return when {
@@ -177,12 +177,12 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
  */
 fun bishopTrajectory(start: Square, end: Square): List<Square> {
     val squares = mutableListOf<Square>()
-    if (!(start.inside() && end.inside())) {
+    if (!squaresAreInside(start, end)) {
         throw IllegalArgumentException()
     }
     when {
         start == end -> {
-            squares += Square(start.column, start.row)
+            squares += start
             return squares
         }
         abs(end.row - start.row) == abs(end.column - start.column) -> {
@@ -227,7 +227,7 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
-    if (!start.inside() || !end.inside()) {
+    if (!squaresAreInside(start, end)) {
         throw IllegalArgumentException()
     }
     return if (abs(start.column - end.column) >= abs(start.row - end.row)) {

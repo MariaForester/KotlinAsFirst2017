@@ -167,10 +167,8 @@ fun bestLongJump(jumps: String): Int {
 fun bestHighJump(jumps: String): Int {
     val parts = jumps.split(" ")
     var maximum = -1
-    var currentNumber = 0
     for (i in 0 until parts.size - 1 step 2) {
-
-        currentNumber = try {
+        val currentNumber = try {
             parts[i].toInt()
         } catch (e: NumberFormatException) {
             return -1
@@ -178,7 +176,6 @@ fun bestHighJump(jumps: String): Int {
         if ((currentNumber > maximum) && ("+" in parts[i + 1])) {
             maximum = currentNumber
         }
-
     }
     return maximum
 }
@@ -254,14 +251,14 @@ fun mostExpensive(description: String): String {
     var name = ""
     for (part in parts) {
         val components = part.split(" ")
-        try {
-            val lastComponent = components.last().toDouble()
-            if (lastComponent >= price) {
-                price = lastComponent
-                name = components[components.size - 2]
-            }
+        val lastComponent = try {
+            components.last().toDouble()
         } catch (e: NumberFormatException) {
             return ""
+        }
+        if (lastComponent >= price) {
+            price = lastComponent
+            name = components[0]
         }
     }
     return name

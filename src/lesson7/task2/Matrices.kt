@@ -69,10 +69,6 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     var countWidth = width
     var countHeight = height
     var result = createMatrix(height, width, e = 0)
-    if (width == 1 && height == 1) {
-        result[0, 0] = 1
-        return result
-    }
     while (row < countHeight && column < countWidth) {
         for (i in column until countWidth) {
             result[row, i] = count++
@@ -120,10 +116,6 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     var column = 0
     var count = 1
     var result = createMatrix(height, width, e = 0)
-    if (width == 1 && height == 1) {
-        result[0, 0] = 1
-        return result
-    }
     while (row < heightCount && column < widthCount) {
         for (i in column until widthCount) {
             result[row, i] = count
