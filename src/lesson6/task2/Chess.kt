@@ -29,7 +29,7 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         return if (inside()) {
-            (column + 96).toChar() + row.toString()
+            (column + 'a'.toInt() - 1).toChar() + row.toString()
         } else {
             ""
         }
@@ -47,7 +47,7 @@ fun square(notation: String): Square {
     if (notation == "" || notation[0] !in columns || notation.length != 2) {
         throw IllegalArgumentException()
     }
-    val column = columns.indexOf(notation[0]) + 1
+    val column = notation[0].toInt() - 'a'.toInt() + 1
     val row = try {
         notation[notation.length - 1].toString().toInt()
     } catch (e: NumberFormatException) {
