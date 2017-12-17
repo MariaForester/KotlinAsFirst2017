@@ -191,20 +191,27 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
             return squares
         }
         else -> {
-            for (i in 1..8) {
-                for (j in 1..8) {
-                    if (abs(start.column - i) == abs(start.row - j) && abs(end.column - i) == abs(end.row - j)) {
-                        squares += start
-                        squares += Square(i, j)
-                        squares += end
-                        return squares
-                    }
+            val x1 = (end.row + end.column - start.row + start.column) / 2
+            val y1 =  x1 + start.row - start.column
+            val x2 = (end.row - end.column - start.row - start.column)/ -2
+            val y2 = -x2 + start.row + start.column
+            val square1 = Square(x1, y1)
+            val square2 = Square(x2, y2)
+            if ((start.column + end.column + start.row + end.row) % 2 == 0) {
+                squares += start
+                if (square1.inside()) {
+                    squares += square1
+                } else {
+                    squares += square2
                 }
+                squares += end
+                return squares
             }
         }
     }
-    return listOf()
+    return squares
 }
+
 
 /**
  * Средняя
