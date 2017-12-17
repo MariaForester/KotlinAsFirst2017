@@ -29,7 +29,7 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         return if (inside()) {
-            (column + 'a'.toInt() - 1).toChar() + row.toString()
+            ('a' + column - 1) + row.toString()
         } else {
             ""
         }
