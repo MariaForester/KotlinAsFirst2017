@@ -58,19 +58,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (i in 0 until substrings.size) {
         var count = 0
         for (line in File(inputName).readLines()) {
-            if (substrings[i].length == 1) {
-                for (symbol in line) {
-                    if (symbol.toString().toLowerCase() == substrings[i].toLowerCase()) {
-                        count++
-                    }
-                }
-            } else {
-                for (word in line.split(Regex("\\s+"))) {
-                    if (substrings[i].toLowerCase() in  word.toLowerCase()) {
-                        count++
-                    }
-                }
-            }
+            count += line.toLowerCase().split(substrings[i].toLowerCase()).size - 1
         }
         map.put(substrings[i], count)
     }
